@@ -392,12 +392,8 @@ var containsFiveOrMoreDivs = function(domElement) {
       recurse(domElement.children[i]);
     }
   }
-recurse(document.body.domElement);
-  if (count >= 5){
-    return true;
-  } else{
-    return false;
-  }
+recurse(document.body);
+return count >= 5;
 };
 
 // For underbar-contains:
@@ -411,11 +407,16 @@ var _ = {};
   /**
    * Returns true if `value` exists in `list`.
    */
-  _.contains = function(list, value){
+
+  _.contains = function(list, target){
+      var flag = false;
     _.each(list, function(value){
-      if (value)
-        return true;
+    if (value === target){
+      flag = true;
+    }
     });
+    return flag;
+  };
 
   /**
    * You might find the `_.each` function useful for writing `contains`.
@@ -509,7 +510,7 @@ var makeHashTable = function() {
   return {
     _storage: [],
     retrieve: function(key) {
-
+      
       return this._storage[hashFn(key, max)];
     },
 
@@ -558,14 +559,16 @@ Array.prototype.last = function(){
 // Note: your function only needs to work correctly on arrays.
 
 
-var reduceRight = function(collection, iterator, accumulator){
-  var flag = accumulator === undefined;
-    for (var i = collection.length; i > 0; i-- ){
-      if (flag){
-        accumulator = collection[collection.length - 1];
-        flag = false;
-      } 
-      accumulator = accumulator + iterator(value, key, collection);
-   }
+var reduceRight = function(array, iterator, accumulator){
+  var flag = accumulator.length == 2;
+
+for (var i = array.length - 1; i >= 0; i--){
+    if (flag){
+      accumulator = array[array.length - 1]
+      flag = false;
+    } else{
+      accumulator = iterator(accumulator, array[i]);
+    }
+  }
   return accumulator;
 };
